@@ -1,4 +1,4 @@
-docker run --name pg-shop3 -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=shop -p 5433:5432 -d postgres:16.1
+docker run --name pg-shop3 -e POSTGRES_PASSWORD=* -e POSTGRES_DB=* -p 5433:5432 -d postgres:16.1
 docker exec -it pg-shop3 psql -U postgres
 
 shop=# SELECT * FROM customers WHERE name LIKE 'А%' ORDER BY email;
