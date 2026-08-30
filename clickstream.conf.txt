@@ -1,0 +1,34 @@
+input {
+  file {
+    path => "/app/weblog.csv"
+    start_position => "beginning"
+    sincedb_path => "/dev/null"
+  }
+}
+
+filter {
+  csv {
+    columns => ["IP", "Time", "URL", "Status"]
+    separator => ","
+  }
+
+  mutate {
+    gsub => [ "Time", "^\[", "" ]
+  }
+
+  date {
+    match => [ "Time", "dd/MMM/yyyy:HH:mm:ss Z" ]
+    target => "@timestamp"
+  }
+}
+
+output {
+  stdout {
+    codec => rubydebug
+  }
+
+  elasticsearch {
+    hosts => ["http://elasticsearch:9200"]
+    index  => "clickstream-csv"
+  }
+}
