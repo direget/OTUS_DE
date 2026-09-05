@@ -12,13 +12,16 @@ filter {
     separator => ","
   }
 
-  mutate {
-    gsub => [ "Time", "^\[", "" ]
+  date {
+    match => [ "Time", "[dd/MMM/yyyy:HH:mm:ss", "dd/MMM/yyyy:HH:mm:ss" ]
+    locale => "en"
+    target => "eventtime"
   }
 
-  date {
-    match => [ "Time", "dd/MMM/yyyy:HH:mm:ss Z" ]
-    target => "@timestamp"
+  mutate {
+    convert => { "Status" => "integer" }
+    strip => ["IP", "Time", "URL"]
+    remove_field => ["path", "message", "host", "@version"]
   }
 }
 
